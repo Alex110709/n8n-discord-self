@@ -1,4 +1,4 @@
-# n8n-nodes-discord-self
+# n8n-nodes-discord-user
 
 n8n용 Discord Self-Bot 노드 - 사용자 계정으로 Discord 상호작용을 자동화합니다.
 
@@ -27,7 +27,7 @@ n8n용 Discord Self-Bot 노드 - 사용자 계정으로 Discord 상호작용을 
 
 ```bash
 cd ~/.n8n/custom
-npm install n8n-nodes-discord-self
+npm install n8n-nodes-discord-user
 ```
 
 설치 후 n8n을 재시작하세요.

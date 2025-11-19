@@ -1,7 +1,7 @@
 {
-  "name": "@alex110709/n8n-nodes-discord-self",
+  "name": "n8n-nodes-discord-user",
   "version": "2.0.0",
-  "description": "n8n node for Discord self-bot - Full Discord API functionality",
+  "description": "n8n community node for Discord user automation - Full Discord API functionality",
   "keywords": [
     "n8n-community-node-package",
     "n8n",

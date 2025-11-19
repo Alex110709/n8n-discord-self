@@ -20,11 +20,11 @@ npm publish
 
 ### 3. Verify publication
 ```bash
-npm view n8n-nodes-discord-self
+npm view n8n-nodes-discord-user
 ```
 
 ## Package Information
-- **Name**: n8n-nodes-discord-self
+- **Name**: n8n-nodes-discord-user
 - **Version**: 1.0.0
 - **Package Size**: ~9.3 KB
 - **Unpacked Size**: ~38.5 KB
@@ -35,13 +35,13 @@ After publishing, users can install via:
 
 ### n8n Community Nodes UI
 1. Settings > Community Nodes
-2. Install > Enter: n8n-nodes-discord-self
+2. Install > Enter: n8n-nodes-discord-user
 3. Install
 
 ### Manual Installation
 ```bash
 cd ~/.n8n/custom
-npm install n8n-nodes-discord-self
+npm install n8n-nodes-discord-user
 ```
 
 ## Updating the Package
@@ -76,4 +76,4 @@ You don't have permission. Make sure you're logged in as the package owner.
 
 ## Support
 - Report issues: https://github.com/Alex110709/n8n-discord-self/issues
-- npm package: https://www.npmjs.com/package/n8n-nodes-discord-self
+- npm package: https://www.npmjs.com/package/n8n-nodes-discord-user

@@ -3,13 +3,13 @@
 ## ✅ 성공적으로 완료된 작업
 
 ### 1. 패키지 배포
-- **패키지명**: `@alex110709/n8n-nodes-discord-self`
+- **패키지명**: `@alex110709/n8n-nodes-discord-user`
 - **버전**: 2.0.0
 - **npm 배포**: ✅ 완료
 - **GitHub 푸시**: ✅ 완료
 
 ### 2. 링크
-- **npm**: https://www.npmjs.com/package/@alex110709/n8n-nodes-discord-self
+- **npm**: https://www.npmjs.com/package/@alex110709/n8n-nodes-discord-user
 - **GitHub**: https://github.com/Alex110709/n8n-discord-self
 
 ---
@@ -19,13 +19,13 @@
 ### n8n Community Nodes UI (권장)
 ```
 Settings → Community Nodes → Install
-패키지명: @alex110709/n8n-nodes-discord-self
+패키지명: @alex110709/n8n-nodes-discord-user
 ```
 
 ### 수동 설치
 ```bash
 cd ~/.n8n/custom
-npm install @alex110709/n8n-nodes-discord-self
+npm install @alex110709/n8n-nodes-discord-user
 ```
 
 ---
@@ -74,12 +74,12 @@ Dependencies: discord.js-selfbot-v13, n8n-core
 
 ### npm에서 패키지 확인
 ```bash
-npm view @alex110709/n8n-nodes-discord-self
+npm view @alex110709/n8n-nodes-discord-user
 ```
 
 ### 설치 테스트
 ```bash
-npm install @alex110709/n8n-nodes-discord-self
+npm install @alex110709/n8n-nodes-discord-user
 ```
 
 ---

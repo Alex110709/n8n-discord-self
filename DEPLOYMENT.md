@@ -32,7 +32,7 @@ npm publish
 
 ## 📋 Package Summary
 
-- **Name**: n8n-nodes-discord-self
+- **Name**: n8n-nodes-discord-user
 - **Version**: 2.0.0
 - **Package Size**: 16.3 KB
 - **Unpacked Size**: 103.8 KB
@@ -62,12 +62,12 @@ npm publish
 
 1. Verify publication:
 ```bash
-npm view n8n-nodes-discord-self
+npm view n8n-nodes-discord-user
 ```
 
 2. Test installation:
 ```bash
-npm install n8n-nodes-discord-self
+npm install n8n-nodes-discord-user
 ```
 
 3. Update documentation with examples
@@ -75,7 +75,7 @@ npm install n8n-nodes-discord-self
 ## 🔗 Links
 
 - GitHub: https://github.com/Alex110709/n8n-discord-self
-- npm: https://www.npmjs.com/package/n8n-nodes-discord-self (after publishing)
+- npm: https://www.npmjs.com/package/n8n-nodes-discord-user (after publishing)
 
 ## 📊 Version History
 

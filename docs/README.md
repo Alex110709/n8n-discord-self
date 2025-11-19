@@ -1,4 +1,4 @@
-# n8n-nodes-discord-self
+# n8n-nodes-discord-user
 
 Discord Self-Bot node for n8n - Automate Discord interactions using your user account.
 
@@ -27,7 +27,7 @@ This package provides a custom n8n node that allows you to:
 
 ```bash
 cd ~/.n8n/custom
-npm install n8n-nodes-discord-self
+npm install n8n-nodes-discord-user
 ```
 
 Restart n8n after installation.

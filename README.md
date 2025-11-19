@@ -1,4 +1,4 @@
-# n8n-nodes-discord-self
+# n8n-nodes-discord-user
 
 ![n8n.io - Workflow Automation](https://raw.githubusercontent.com/n8n-io/n8n/master/assets/n8n-logo.png)
 
@@ -12,7 +12,7 @@ Discord Self-Bot node for n8n - Automate Discord interactions using your user ac
 
 1. Go to **Settings** > **Community Nodes**
 2. Select **Install**
-3. Enter `n8n-nodes-discord-self` in the npm Package Name field
+3. Enter `n8n-nodes-discord-user` in the npm Package Name field
 4. Agree to the risks of using community nodes
 5. Click **Install**
 
@@ -20,7 +20,7 @@ Discord Self-Bot node for n8n - Automate Discord interactions using your user ac
 
 ```bash
 cd ~/.n8n/custom
-npm install n8n-nodes-discord-self
+npm install n8n-nodes-discord-user
 # Restart n8n
 ```
 

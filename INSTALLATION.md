@@ -2,9 +2,9 @@
 
 ## ✅ Successfully Published!
 
-**Package Name**: `@alex110709/n8n-nodes-discord-self`  
+**Package Name**: `@alex110709/n8n-nodes-discord-user`  
 **Version**: 2.0.0  
-**npm URL**: https://www.npmjs.com/package/@alex110709/n8n-nodes-discord-self  
+**npm URL**: https://www.npmjs.com/package/@alex110709/n8n-nodes-discord-user  
 **GitHub**: https://github.com/Alex110709/n8n-discord-self
 
 ---
@@ -16,7 +16,7 @@
 1. Open your n8n instance
 2. Go to **Settings** → **Community Nodes**
 3. Click **Install**
-4. Enter: `@alex110709/n8n-nodes-discord-self`
+4. Enter: `@alex110709/n8n-nodes-discord-user`
 5. Click **Install**
 6. Restart n8n
 
@@ -27,7 +27,7 @@
 cd ~/.n8n/custom
 
 # Install the package
-npm install @alex110709/n8n-nodes-discord-self
+npm install @alex110709/n8n-nodes-discord-user
 
 # Restart n8n
 ```
@@ -37,13 +37,13 @@ npm install @alex110709/n8n-nodes-discord-self
 Add to your Dockerfile or docker-compose.yml:
 
 ```dockerfile
-ENV N8N_CUSTOM_EXTENSIONS="@alex110709/n8n-nodes-discord-self"
+ENV N8N_CUSTOM_EXTENSIONS="@alex110709/n8n-nodes-discord-user"
 ```
 
 Or install manually in the container:
 
 ```bash
-docker exec -it n8n npm install -g @alex110709/n8n-nodes-discord-self
+docker exec -it n8n npm install -g @alex110709/n8n-nodes-discord-user
 ```
 
 ---
@@ -141,7 +141,7 @@ docker exec -it n8n npm install -g @alex110709/n8n-nodes-discord-self
 ### Package not found
 Make sure you're using the scoped package name:
 ```bash
-@alex110709/n8n-nodes-discord-self
+@alex110709/n8n-nodes-discord-user
 ```
 
 ### Node doesn't appear
@@ -161,7 +161,7 @@ Make sure you're using the scoped package name:
 - **Documentation**: See `docs/` folder
 - **Examples**: See `examples/` folder
 - **GitHub Issues**: https://github.com/Alex110709/n8n-discord-self/issues
-- **npm Package**: https://www.npmjs.com/package/@alex110709/n8n-nodes-discord-self
+- **npm Package**: https://www.npmjs.com/package/@alex110709/n8n-nodes-discord-user
 
 ---
 
@@ -175,7 +175,7 @@ Settings → Community Nodes → Update
 
 # Manual
 cd ~/.n8n/custom
-npm update @alex110709/n8n-nodes-discord-self
+npm update @alex110709/n8n-nodes-discord-user
 ```
 
 ---
