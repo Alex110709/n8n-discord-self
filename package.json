@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-discord-user",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "n8n community node for Discord user automation - Full Discord API functionality",
   "keywords": [
     "n8n-community-node-package",
@@ -57,11 +57,11 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "discord.js-selfbot-v13": "^2.14.13",
-    "n8n-core": "^1.19.0"
+    "discord.js-selfbot-v13": "^2.14.13"
   },
   "peerDependencies": {
-    "n8n-workflow": "*"
+    "n8n-workflow": "*",
+    "n8n-core": "*"
   },
   "engines": {
     "node": ">=18.10",
