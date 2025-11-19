@@ -1,0 +1,70 @@
+{
+  "name": "Discord Self-Bot Example",
+  "nodes": [
+    {
+      "parameters": {},
+      "name": "Start",
+      "type": "n8n-nodes-base.start",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "operation": "sendMessage",
+        "channelId": "123456789012345678",
+        "content": "Hello from n8n automation!"
+      },
+      "name": "Discord Self-Bot - Send Message",
+      "type": "n8n-nodes-discord-self.discordSelf",
+      "typeVersion": 1,
+      "position": [450, 300],
+      "credentials": {
+        "discordSelfApi": {
+          "id": "1",
+          "name": "Discord Self-Bot Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "readMessages",
+        "channelId": "123456789012345678",
+        "limit": 5
+      },
+      "name": "Discord Self-Bot - Read Messages",
+      "type": "n8n-nodes-discord-self.discordSelf",
+      "typeVersion": 1,
+      "position": [650, 300],
+      "credentials": {
+        "discordSelfApi": {
+          "id": "1",
+          "name": "Discord Self-Bot Account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Discord Self-Bot - Send Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Discord Self-Bot - Send Message": {
+      "main": [
+        [
+          {
+            "node": "Discord Self-Bot - Read Messages",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

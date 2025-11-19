@@ -1,0 +1,29 @@
+# Source files
+src/
+tests/
+examples/
+
+# Documentation
+docs/
+*.md
+!README.md
+
+# Config files
+.eslintrc.js
+.prettierrc.json
+tsconfig.json
+jest.config.js
+
+# Git
+.git/
+.gitignore
+
+# IDE
+.vscode/
+.idea/
+
+# Misc
+*.log
+.DS_Store
+coverage/
+node_modules/
