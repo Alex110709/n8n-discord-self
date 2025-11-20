@@ -208,7 +208,7 @@ export class DiscordSelfTrigger implements INodeType {
 
     const client = new Client({
       checkUpdate: false,
-      // @ts-ignore - partials option exists but types might not be exported
+      // @ts-expect-error - partials option exists but types might not be exported
       partials: ['CHANNEL', 'MESSAGE'], // Required for DM support
     });
 
