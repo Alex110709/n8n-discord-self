@@ -198,8 +198,18 @@ export class DiscordSelfTrigger implements INodeType {
     const event = this.getNodeParameter('event') as string;
     const filters = this.getNodeParameter('filters', {}) as IDataObject;
 
+    // Validate token
+    if (!token || token.trim() === '') {
+      throw new NodeOperationError(
+        this.getNode(),
+        'Discord token is required. Please check your credentials.',
+      );
+    }
+
     const client = new Client({
       checkUpdate: false,
+      // @ts-ignore - partials option exists but types might not be exported
+      partials: ['CHANNEL', 'MESSAGE'], // Required for DM support
     });
 
     const closeFunction = async () => {
@@ -208,6 +218,14 @@ export class DiscordSelfTrigger implements INodeType {
 
     try {
       await client.login(token);
+
+      // Wait for client to be ready
+      await new Promise<void>((resolve) => {
+        client.once('ready', () => {
+          console.log(`Discord User Trigger: Logged in as ${client.user?.tag}`);
+          resolve();
+        });
+      });
 
       // Helper function to check filters
       const passesFilters = (data: any): boolean => {
@@ -513,11 +531,26 @@ export class DiscordSelfTrigger implements INodeType {
           }
         });
       }
+      // Error handling for client
+      client.on('error', (error) => {
+        console.error('Discord Client Error:', error);
+      });
+
     } catch (error) {
       await client.destroy();
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      
+      // Provide helpful error messages
+      if (errorMessage.includes('TOKEN_INVALID') || errorMessage.includes('Incorrect login')) {
+        throw new NodeOperationError(
+          this.getNode(),
+          'Invalid Discord token. Please check your credentials and make sure the token is correct.',
+        );
+      }
+      
       throw new NodeOperationError(
         this.getNode(),
-        `Discord Trigger error: ${error instanceof Error ? error.message : String(error)}`,
+        `Discord Trigger error: ${errorMessage}`,
       );
     }
 
