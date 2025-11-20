@@ -21,15 +21,15 @@ import {
 
 export class DiscordSelfTrigger implements INodeType {
   description: INodeTypeDescription = {
-    displayName: 'Discord Self-Bot Trigger',
-    name: 'discordSelfTrigger',
+    displayName: 'Discord User Trigger',
+    name: 'discordUserTrigger',
     icon: 'file:discord.svg',
     group: ['trigger'],
     version: 1,
     subtitle: '={{$parameter["event"]}}',
     description: 'Trigger workflow on Discord events (messages, reactions, members)',
     defaults: {
-      name: 'Discord Self-Bot Trigger',
+      name: 'Discord User Trigger',
     },
     inputs: [],
     outputs: ['main'],
@@ -48,7 +48,12 @@ export class DiscordSelfTrigger implements INodeType {
           {
             name: 'Message Created',
             value: 'messageCreate',
-            description: 'Triggers when a new message is sent',
+            description: 'Triggers when a new message is sent (servers + DMs)',
+          },
+          {
+            name: 'DM Received',
+            value: 'dmReceived',
+            description: 'Triggers when you receive a direct message',
           },
           {
             name: 'Message Updated',
@@ -168,6 +173,20 @@ export class DiscordSelfTrigger implements INodeType {
             default: false,
             description: 'Whether to ignore messages from yourself',
           },
+          {
+            displayName: 'DM Only',
+            name: 'dmOnly',
+            type: 'boolean',
+            default: false,
+            description: 'Whether to only trigger on direct messages',
+          },
+          {
+            displayName: 'Server Only',
+            name: 'serverOnly',
+            type: 'boolean',
+            default: false,
+            description: 'Whether to only trigger on server messages (ignore DMs)',
+          },
         ],
       },
     ],
@@ -192,6 +211,16 @@ export class DiscordSelfTrigger implements INodeType {
 
       // Helper function to check filters
       const passesFilters = (data: any): boolean => {
+        // DM only filter
+        if (filters.dmOnly && !data.isDM) {
+          return false;
+        }
+        
+        // Server only filter
+        if (filters.serverOnly && data.isDM) {
+          return false;
+        }
+
         // Channel filter
         if (filters.channelIds) {
           const channelIds = (filters.channelIds as string).split(',').map((id) => id.trim());
@@ -243,9 +272,18 @@ export class DiscordSelfTrigger implements INodeType {
         return true;
       };
 
-      // Message Created
-      if (event === 'messageCreate') {
+      // Message Created or DM Received
+      if (event === 'messageCreate' || event === 'dmReceived') {
         client.on('messageCreate', async (message: Message) => {
+          const isDM = message.channel.type === 'DM';
+          
+          // For dmReceived event, only trigger on DMs from others
+          if (event === 'dmReceived') {
+            if (!isDM || message.author.id === client.user?.id) {
+              return;
+            }
+          }
+
           const data = {
             messageId: message.id,
             channelId: message.channelId,
@@ -253,6 +291,8 @@ export class DiscordSelfTrigger implements INodeType {
             content: message.content,
             userId: message.author.id,
             isBot: message.author.bot,
+            isDM,
+            channelType: message.channel.type,
             author: {
               id: message.author.id,
               username: message.author.username,

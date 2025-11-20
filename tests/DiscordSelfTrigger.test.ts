@@ -12,8 +12,8 @@ describe('DiscordSelfTrigger', () => {
   });
 
   it('should have correct node description', () => {
-    expect(discordTrigger.description.displayName).toBe('Discord Self-Bot Trigger');
-    expect(discordTrigger.description.name).toBe('discordSelfTrigger');
+    expect(discordTrigger.description.displayName).toBe('Discord User Trigger');
+    expect(discordTrigger.description.name).toBe('discordUserTrigger');
     expect(discordTrigger.description.group).toContain('trigger');
   });
 

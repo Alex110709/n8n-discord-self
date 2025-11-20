@@ -37,7 +37,7 @@ export class DiscordUser implements INodeType {
     group: ['transform'],
     version: 1,
     subtitle: '={{$parameter["resource"]}} - {{$parameter["operation"]}}',
-    description: 'Interact with Discord as a user - Complete automation toolkit',
+    description: 'Complete Discord automation - Messages, Servers, Roles, Members, DMs',
     defaults: {
       name: 'Discord User',
     },
