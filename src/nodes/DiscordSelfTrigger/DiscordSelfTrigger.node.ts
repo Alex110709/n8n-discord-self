@@ -242,6 +242,18 @@ export class DiscordSelfTrigger implements INodeType {
       console.log(`[Discord Trigger] 📊 Watching for event: ${event}`);
       console.log(`[Discord Trigger] 🔧 Filters:`, JSON.stringify(filters, null, 2));
 
+      // Add global debug listener to see if ANY messages are received
+      console.log('[Discord Trigger] 🔍 Adding global debug listener...');
+      client.on('messageCreate', (msg) => {
+        console.log('[Discord Trigger] 🔔 GLOBAL: Message detected!', {
+          author: msg.author?.username,
+          channel: msg.channel?.id,
+          type: (msg.channel as any)?.type,
+          content: msg.content?.substring(0, 50),
+        });
+      });
+      console.log('[Discord Trigger] ✅ Global debug listener added');
+
       console.log('[Discord Trigger] 🔧 Setting up event listeners...');
       
       try {
