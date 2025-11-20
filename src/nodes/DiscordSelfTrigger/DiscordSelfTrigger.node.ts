@@ -211,12 +211,16 @@ export class DiscordSelfTrigger implements INodeType {
     try {
       console.log('[Discord Trigger] 🔨 Creating Discord Client...');
       
-      // Create client with minimal configuration
+      // Create client with ALL intents enabled for self-bot
+      // Self-bots need explicit intent configuration
       client = new Client({
         checkUpdate: false,
+        // Enable all intents - required for self-bots to receive events
+        intents: 32767, // All intents = 32767 (binary: 111111111111111)
+        // Alternative: intents: ['GUILDS', 'GUILD_MESSAGES', 'DIRECT_MESSAGES']
       });
       
-      console.log('[Discord Trigger] ✅ Client created successfully');
+      console.log('[Discord Trigger] ✅ Client created with ALL intents enabled');
     } catch (error) {
       console.error('[Discord Trigger] ❌ Failed to create Client:', error);
       throw new NodeOperationError(
@@ -242,6 +246,18 @@ export class DiscordSelfTrigger implements INodeType {
       console.log(`[Discord Trigger] 📊 Watching for event: ${event}`);
       console.log(`[Discord Trigger] 🔧 Filters:`, JSON.stringify(filters, null, 2));
 
+      // Add RAW event listener to see if gateway is working
+      console.log('[Discord Trigger] 🔍 Adding raw event listener...');
+      client.on('raw' as any, (packet: any) => {
+        if (packet.t === 'MESSAGE_CREATE') {
+          console.log('[Discord Trigger] 📡 RAW MESSAGE_CREATE event:', {
+            channelId: packet.d?.channel_id,
+            author: packet.d?.author?.username,
+            content: packet.d?.content?.substring(0, 50),
+          });
+        }
+      });
+      
       // Add global debug listener to see if ANY messages are received
       console.log('[Discord Trigger] 🔍 Adding global debug listener...');
       client.on('messageCreate', (msg) => {
