@@ -208,7 +208,11 @@ export class DiscordSelfTrigger implements INodeType {
 
     const client = new Client({
       checkUpdate: false,
-      partials: ['CHANNEL', 'MESSAGE'], // Required for DM support
+      ws: {
+        properties: {
+          browser: 'Discord Client',
+        },
+      },
     });
 
     const closeFunction = async () => {
@@ -221,7 +225,10 @@ export class DiscordSelfTrigger implements INodeType {
       // Wait for client to be ready
       await new Promise<void>((resolve) => {
         client.once('ready', () => {
-          console.log(`Discord User Trigger: Logged in as ${client.user?.tag}`);
+          console.log(`[Discord Trigger] ✅ Logged in as ${client.user?.tag}`);
+          console.log(`[Discord Trigger] 📊 Watching for event: ${event}`);
+          console.log(`[Discord Trigger] 🔧 Filters:`, JSON.stringify(filters, null, 2));
+          console.log(`[Discord Trigger] 💬 DM Channels:`, client.channels.cache.filter((c: any) => c.type === 1).size);
           resolve();
         });
       });
@@ -291,56 +298,85 @@ export class DiscordSelfTrigger implements INodeType {
 
       // Message Created or DM Received
       if (event === 'messageCreate' || event === 'dmReceived') {
+        console.log(`[Discord Trigger] 🎯 Setting up messageCreate listener for event: ${event}`);
+        
         client.on('messageCreate', async (message: Message) => {
-          // Check if it's a DM - handle both numeric and string channel types
-          const channelType = (message.channel as any).type;
-          const isDM = channelType === 1 || channelType === 'DM';
-          
-          // Debug log
-          console.log(`[Discord Trigger] Message received - Type: ${channelType}, isDM: ${isDM}, Author: ${message.author.username}`);
-          
-          // For dmReceived event, only trigger on DMs from others
-          if (event === 'dmReceived') {
-            if (!isDM || message.author.id === client.user?.id) {
-              return;
+          try {
+            // Check if it's a DM - handle both numeric and string channel types
+            const channelType = (message.channel as any).type;
+            const isDM = channelType === 1 || channelType === 'DM';
+            
+            // Detailed debug log
+            console.log(`[Discord Trigger] 📨 MESSAGE RECEIVED:`, {
+              event: event,
+              author: message.author.username,
+              authorId: message.author.id,
+              channelId: message.channelId,
+              channelType: channelType,
+              isDM: isDM,
+              content: message.content.substring(0, 100),
+              timestamp: new Date().toISOString(),
+            });
+            
+            // For dmReceived event, only trigger on DMs from others
+            if (event === 'dmReceived') {
+              console.log(`[Discord Trigger] 🔍 Checking dmReceived conditions - isDM: ${isDM}, isSelf: ${message.author.id === client.user?.id}`);
+              if (!isDM || message.author.id === client.user?.id) {
+                console.log(`[Discord Trigger] ⏭️ Skipping - not a DM from others`);
+                return;
+              }
             }
-          }
 
-          const data = {
-            messageId: message.id,
-            channelId: message.channelId,
-            guildId: message.guildId,
-            content: message.content,
-            userId: message.author.id,
-            isBot: message.author.bot,
-            isDM,
-            channelType: String(message.channel.type),
-            author: {
-              id: message.author.id,
-              username: message.author.username,
-              discriminator: message.author.discriminator,
-              avatar: message.author.avatar,
-            },
-            mentions: message.mentions.users.map((u) => ({
-              id: u.id,
-              username: u.username,
-            })),
-            attachments: message.attachments.map((a) => ({
-              id: a.id,
-              url: a.url,
-              name: a.name,
-              size: a.size,
-            })),
-            embeds: message.embeds,
-            createdAt: message.createdAt,
-            timestamp: message.createdTimestamp,
-          };
+            const data = {
+              messageId: message.id,
+              channelId: message.channelId,
+              guildId: message.guildId,
+              content: message.content,
+              userId: message.author.id,
+              isBot: message.author.bot,
+              isDM,
+              channelType: String(message.channel.type),
+              author: {
+                id: message.author.id,
+                username: message.author.username,
+                discriminator: message.author.discriminator,
+                avatar: message.author.avatar,
+              },
+              mentions: message.mentions.users.map((u) => ({
+                id: u.id,
+                username: u.username,
+              })),
+              attachments: message.attachments.map((a) => ({
+                id: a.id,
+                url: a.url,
+                name: a.name,
+                size: a.size,
+              })),
+              embeds: message.embeds,
+              createdAt: message.createdAt,
+              timestamp: message.createdTimestamp,
+            };
 
-          if (passesFilters(data)) {
-            console.log(`[Discord Trigger] Emitting message data for: ${message.author.username}`);
-            this.emit([this.helpers.returnJsonArray([data])]);
-          } else {
-            console.log(`[Discord Trigger] Message filtered out`);
+            if (passesFilters(data)) {
+              console.log(`[Discord Trigger] ✅ EMITTING message data:`, {
+                author: message.author.username,
+                isDM: isDM,
+                messageId: message.id,
+              });
+              this.emit([this.helpers.returnJsonArray([data])]);
+            } else {
+              console.log(`[Discord Trigger] ❌ Message FILTERED OUT:`, {
+                author: message.author.username,
+                isDM: isDM,
+                filters: {
+                  dmOnly: filters.dmOnly,
+                  serverOnly: filters.serverOnly,
+                  ignoreSelf: filters.ignoreSelf,
+                },
+              });
+            }
+          } catch (error) {
+            console.error(`[Discord Trigger] ❌ Error processing message:`, error);
           }
         });
       }

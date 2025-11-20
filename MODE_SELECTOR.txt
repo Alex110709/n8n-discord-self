@@ -1,0 +1,13 @@
+Add this at the beginning of properties array:
+
+{
+  displayName: 'Mode',
+  name: 'mode',
+  type: 'options',
+  noDataExpression: true,
+  options: [
+    { name: 'Action', value: 'action', description: 'Perform Discord operations' },
+    { name: 'Trigger', value: 'trigger', description: 'Listen to real-time Discord events' },
+  ],
+  default: 'action',
+},
