@@ -206,17 +206,33 @@ export class DiscordSelfTrigger implements INodeType {
       );
     }
 
-    // Create client with minimal configuration
-    const client = new Client({
-      checkUpdate: false,
-    });
+    let client: Client;
+    
+    try {
+      console.log('[Discord Trigger] 🔨 Creating Discord Client...');
+      
+      // Create client with minimal configuration
+      client = new Client({
+        checkUpdate: false,
+      });
+      
+      console.log('[Discord Trigger] ✅ Client created successfully');
+    } catch (error) {
+      console.error('[Discord Trigger] ❌ Failed to create Client:', error);
+      throw new NodeOperationError(
+        this.getNode(),
+        `Failed to create Discord Client: ${error instanceof Error ? error.message : String(error)}`,
+      );
+    }
 
     const closeFunction = async () => {
       await client.destroy();
     };
 
     try {
+      console.log('[Discord Trigger] 🔐 Logging in...');
       await client.login(token);
+      console.log('[Discord Trigger] ✅ Login successful');
 
       // Wait for client to be ready
       await new Promise<void>((resolve) => {

@@ -76,12 +76,26 @@ export class DiscordUser implements INodeType {
     const credentials = await this.getCredentials('discordSelfApi');
     const token = credentials.token as string;
 
-    const client = new Client({ 
-      checkUpdate: false,
-    });
+    let client: Client;
+    
+    try {
+      console.log('[Discord User] 🔨 Creating Discord Client...');
+      client = new Client({ 
+        checkUpdate: false,
+      });
+      console.log('[Discord User] ✅ Client created successfully');
+    } catch (error) {
+      console.error('[Discord User] ❌ Failed to create Client:', error);
+      throw new NodeOperationError(
+        this.getNode(),
+        `Failed to create Discord Client: ${error instanceof Error ? error.message : String(error)}`,
+      );
+    }
 
     try {
+      console.log('[Discord User] 🔐 Logging in...');
       await client.login(token);
+      console.log('[Discord User] ✅ Login successful');
 
       for (let i = 0; i < items.length; i++) {
         try {
