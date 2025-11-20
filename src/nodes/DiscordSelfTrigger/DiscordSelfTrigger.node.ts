@@ -240,7 +240,6 @@ export class DiscordSelfTrigger implements INodeType {
           console.log(`[Discord Trigger] ✅ Logged in as ${client.user?.tag}`);
           console.log(`[Discord Trigger] 📊 Watching for event: ${event}`);
           console.log(`[Discord Trigger] 🔧 Filters:`, JSON.stringify(filters, null, 2));
-          console.log(`[Discord Trigger] 💬 DM Channels:`, client.channels.cache.filter((c: any) => c.type === 1).size);
           resolve();
         });
       });
