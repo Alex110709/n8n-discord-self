@@ -234,33 +234,13 @@ export class DiscordSelfTrigger implements INodeType {
       await client.login(token);
       console.log('[Discord Trigger] ✅ Login successful');
 
-      // Wait for client to be ready
-      console.log('[Discord Trigger] ⏳ Waiting for ready event...');
+      // Simple delay to let client initialize - discord.js-selfbot-v13 doesn't need ready event
+      console.log('[Discord Trigger] ⏳ Waiting for client initialization...');
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      console.log('[Discord Trigger] ✅ Client initialized');
       
-      try {
-        await new Promise<void>((resolve, reject) => {
-          const timeout = setTimeout(() => {
-            reject(new Error('Ready event timeout after 30s'));
-          }, 30000);
-          
-          console.log('[Discord Trigger] 🎯 Setting up ready listener...');
-          
-          client.once('ready', () => {
-            clearTimeout(timeout);
-            console.log(`[Discord Trigger] ✅ Logged in as ${client.user?.tag}`);
-            console.log(`[Discord Trigger] 📊 Watching for event: ${event}`);
-            console.log(`[Discord Trigger] 🔧 Filters:`, JSON.stringify(filters, null, 2));
-            resolve();
-          });
-          
-          console.log('[Discord Trigger] ✅ Ready listener set');
-        });
-      } catch (readyError) {
-        console.error('[Discord Trigger] ❌ Error with ready event:', readyError);
-        throw readyError;
-      }
-      
-      console.log('[Discord Trigger] 🎉 Ready event completed');
+      console.log(`[Discord Trigger] 📊 Watching for event: ${event}`);
+      console.log(`[Discord Trigger] 🔧 Filters:`, JSON.stringify(filters, null, 2));
 
       console.log('[Discord Trigger] 🔧 Setting up event listeners...');
       
