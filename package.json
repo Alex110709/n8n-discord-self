@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-discord-user",
-  "version": "2.1.0",
+  "version": "3.0.0",
   "description": "n8n community node for Discord user automation - Full Discord API functionality",
   "keywords": [
     "n8n-community-node-package",
@@ -39,8 +39,7 @@
       "dist/credentials/DiscordSelfApi.credentials.js"
     ],
     "nodes": [
-      "dist/nodes/DiscordSelf/DiscordSelf.node.js",
-      "dist/nodes/DiscordSelf/DiscordSelfV2.node.js",
+      "dist/nodes/DiscordUser/DiscordUser.node.js",
       "dist/nodes/DiscordSelfTrigger/DiscordSelfTrigger.node.js"
     ]
   },
