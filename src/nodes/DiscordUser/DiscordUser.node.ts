@@ -6,7 +6,7 @@ import {
   NodeOperationError,
 } from 'n8n-workflow';
 
-import { Client, TextChannel, DMChannel } from 'discord.js-selfbot-v13';
+import { Client, TextChannel, DMChannel, Options } from 'discord.js-selfbot-v13';
 import {
   operations,
   messageOperations,
@@ -76,7 +76,12 @@ export class DiscordUser implements INodeType {
     const credentials = await this.getCredentials('discordSelfApi');
     const token = credentials.token as string;
 
-    const client = new Client({ checkUpdate: false });
+    const client = new Client({ 
+      checkUpdate: false,
+      makeCache: Options.cacheWithLimits({
+        MessageManager: 200,
+      }),
+    });
 
     try {
       await client.login(token);

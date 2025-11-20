@@ -16,7 +16,8 @@ import {
   PartialMessage,
   PartialMessageReaction,
   PartialUser,
-  PartialGuildMember
+  PartialGuildMember,
+  Options
 } from 'discord.js-selfbot-v13';
 
 export class DiscordSelfTrigger implements INodeType {
@@ -208,6 +209,10 @@ export class DiscordSelfTrigger implements INodeType {
 
     const client = new Client({
       checkUpdate: false,
+      // Use makeCache with all options enabled for DM support
+      makeCache: Options.cacheWithLimits({
+        MessageManager: 200,
+      }),
       ws: {
         properties: {
           browser: 'Discord Client',
