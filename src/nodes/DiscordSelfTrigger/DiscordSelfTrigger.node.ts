@@ -244,6 +244,11 @@ export class DiscordSelfTrigger implements INodeType {
         });
       });
 
+      console.log('[Discord Trigger] 🔧 Setting up event listeners...');
+      
+      try {
+        // All event setup wrapped in try-catch to catch any internal errors
+
       // Helper function to check filters
       const passesFilters = (data: any): boolean => {
         // DM only filter
@@ -309,9 +314,10 @@ export class DiscordSelfTrigger implements INodeType {
 
       // Message Created or DM Received
       if (event === 'messageCreate' || event === 'dmReceived') {
-        console.log(`[Discord Trigger] 🎯 Setting up messageCreate listener for event: ${event}`);
-        
-        client.on('messageCreate', async (message: Message) => {
+        try {
+          console.log(`[Discord Trigger] 🎯 Setting up messageCreate listener for event: ${event}`);
+          
+          client.on('messageCreate', async (message: Message) => {
           try {
             // Check if it's a DM - handle both numeric and string channel types
             const channelType = (message.channel as any).type;
@@ -390,7 +396,12 @@ export class DiscordSelfTrigger implements INodeType {
             console.error(`[Discord Trigger] ❌ Error processing message:`, error);
           }
         });
+        console.log(`[Discord Trigger] ✅ messageCreate listener set up successfully`);
+      } catch (error) {
+        console.error(`[Discord Trigger] ❌ Error setting up messageCreate listener:`, error);
+        throw error;
       }
+    }
 
       // Message Updated
       else if (event === 'messageUpdate') {
@@ -589,6 +600,13 @@ export class DiscordSelfTrigger implements INodeType {
       client.on('error', (error) => {
         console.error('Discord Client Error:', error);
       });
+      
+      console.log('[Discord Trigger] ✅ All event listeners set up successfully');
+      
+      } catch (setupError) {
+        console.error('[Discord Trigger] ❌ Error during event listener setup:', setupError);
+        throw setupError;
+      }
 
     } catch (error) {
       await client.destroy();
