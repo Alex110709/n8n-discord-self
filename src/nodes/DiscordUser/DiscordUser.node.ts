@@ -116,6 +116,38 @@ export class DiscordUser implements INodeType {
                 content: message.content,
                 createdAt: message.createdAt,
               };
+            } else if (operation === 'sendDM') {
+              const targetUserId = this.getNodeParameter('targetUserId', i) as string;
+              const content = this.getNodeParameter('content', i, '') as string;
+              const embedJson = this.getNodeParameter('embed', i, '') as string;
+
+              // Fetch the user and create/get DM channel
+              const user = await client.users.fetch(targetUserId);
+              if (!user) {
+                throw new NodeOperationError(this.getNode(), `User with ID ${targetUserId} not found`);
+              }
+
+              const dmChannel = await user.createDM();
+
+              const messageOptions: any = {};
+              if (content) messageOptions.content = content;
+              if (embedJson) {
+                try {
+                  messageOptions.embeds = [JSON.parse(embedJson)];
+                } catch (e) {
+                  throw new NodeOperationError(this.getNode(), 'Invalid embed JSON');
+                }
+              }
+
+              const message = await dmChannel.send(messageOptions);
+              result = {
+                messageId: message.id,
+                channelId: message.channelId,
+                userId: targetUserId,
+                content: message.content,
+                createdAt: message.createdAt,
+                isDM: true,
+              };
             } else if (operation === 'read') {
               const channelId = this.getNodeParameter('channelId', i) as string;
               const limit = this.getNodeParameter('limit', i) as number;

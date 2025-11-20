@@ -59,8 +59,14 @@ export const messageOperations: INodeProperties[] = [
       {
         name: 'Send',
         value: 'send',
-        description: 'Send a message',
+        description: 'Send a message to a channel',
         action: 'Send a message',
+      },
+      {
+        name: 'Send DM',
+        value: 'sendDM',
+        description: 'Send a direct message to a user',
+        action: 'Send a direct message',
       },
       {
         name: 'Read',

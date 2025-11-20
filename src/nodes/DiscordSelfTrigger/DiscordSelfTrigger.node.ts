@@ -292,7 +292,12 @@ export class DiscordSelfTrigger implements INodeType {
       // Message Created or DM Received
       if (event === 'messageCreate' || event === 'dmReceived') {
         client.on('messageCreate', async (message: Message) => {
-          const isDM = message.channel.type === 'DM';
+          // Check if it's a DM - handle both numeric and string channel types
+          const channelType = (message.channel as any).type;
+          const isDM = channelType === 1 || channelType === 'DM';
+          
+          // Debug log
+          console.log(`[Discord Trigger] Message received - Type: ${channelType}, isDM: ${isDM}, Author: ${message.author.username}`);
           
           // For dmReceived event, only trigger on DMs from others
           if (event === 'dmReceived') {
@@ -309,7 +314,7 @@ export class DiscordSelfTrigger implements INodeType {
             userId: message.author.id,
             isBot: message.author.bot,
             isDM,
-            channelType: message.channel.type,
+            channelType: String(message.channel.type),
             author: {
               id: message.author.id,
               username: message.author.username,
@@ -332,7 +337,10 @@ export class DiscordSelfTrigger implements INodeType {
           };
 
           if (passesFilters(data)) {
+            console.log(`[Discord Trigger] Emitting message data for: ${message.author.username}`);
             this.emit([this.helpers.returnJsonArray([data])]);
+          } else {
+            console.log(`[Discord Trigger] Message filtered out`);
           }
         });
       }

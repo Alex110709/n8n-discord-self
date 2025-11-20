@@ -16,6 +16,21 @@ export const messageFields: INodeProperties[] = [
     default: '',
     required: true,
   },
+  // Send DM
+  {
+    displayName: 'User ID',
+    name: 'targetUserId',
+    type: 'string',
+    displayOptions: {
+      show: {
+        resource: ['message'],
+        operation: ['sendDM'],
+      },
+    },
+    default: '',
+    required: true,
+    description: 'Discord user ID to send DM to',
+  },
   {
     displayName: 'Message Content',
     name: 'content',
@@ -23,7 +38,7 @@ export const messageFields: INodeProperties[] = [
     displayOptions: {
       show: {
         resource: ['message'],
-        operation: ['send'],
+        operation: ['send', 'sendDM'],
       },
     },
     default: '',
@@ -38,7 +53,7 @@ export const messageFields: INodeProperties[] = [
     displayOptions: {
       show: {
         resource: ['message'],
-        operation: ['send'],
+        operation: ['send', 'sendDM'],
       },
     },
     default: '',
