@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-discord-user",
-  "version": "3.5.0",
+  "version": "3.5.1",
   "description": "n8n community node for Discord user automation - Full Discord API functionality",
   "keywords": [
     "n8n-community-node-package",
