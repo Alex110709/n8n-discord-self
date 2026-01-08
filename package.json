@@ -40,7 +40,8 @@
     ],
     "nodes": [
       "dist/nodes/DiscordUser/DiscordUser.node.js",
-      "dist/nodes/DiscordSelfTrigger/DiscordSelfTrigger.node.js"
+      "dist/nodes/DiscordSelfTrigger/DiscordSelfTrigger.node.js",
+      "dist/nodes/DiscordTool/DiscordTool.node.js"
     ]
   },
   "devDependencies": {
