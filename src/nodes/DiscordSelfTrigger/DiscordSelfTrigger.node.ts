@@ -308,18 +308,28 @@ export class DiscordSelfTrigger implements INodeType {
       if (event === 'messageCreate' || event === 'dmReceived') {
         client.on('messageCreate', (message: Message) => {
           try {
+            // More lenient DM detection
             const channelType = message.channel.type;
-            // Check if channel is DM (type 1 = DM, type 3 = Group DM)
+            // DM channels have no guild (guildId is null)
+            const hasNoGuild =
+              !message.guildId || message.guildId === null || message.guildId === undefined;
+            // Parse channel type to number for comparison
             const typeNum =
-              typeof channelType === 'number' ? channelType : parseInt(channelType, 10);
-            const isDM = typeNum === 1 || typeNum === 3;
+              typeof channelType === 'number' ? channelType : parseInt(String(channelType), 10);
+            // DM = 1, Group DM = 3
+            const isDMChannelType = typeNum === 1 || typeNum === 3;
+            // DM is true if either channel type indicates DM OR no guild
+            const isDM = isDMChannelType || hasNoGuild;
 
             // For dmReceived: only trigger on DMs from OTHER users (not self)
             if (event === 'dmReceived') {
               const clientId = client.user?.id ?? '';
               const isFromSelf = message.author.id === clientId;
-              if (!isDM || isFromSelf) {
-                return;
+              if (isFromSelf) {
+                return; // Ignore own messages
+              }
+              if (!isDM) {
+                return; // Only trigger on DMs
               }
             }
 
