@@ -19,8 +19,6 @@ import {
   PartialGuildMember,
 } from 'discord.js-selfbot-v13';
 
-const DM_CHANNEL_TYPES = [1, 3];
-
 export class DiscordSelfTrigger implements INodeType {
   description: INodeTypeDescription = {
     displayName: 'Discord User Trigger',
@@ -229,8 +227,9 @@ export class DiscordSelfTrigger implements INodeType {
     };
 
     const isDMChannel = (channelType: number | string): boolean => {
+      // DM = 1, Group DM = 3 in discord.js v13
       const typeNum = typeof channelType === 'string' ? parseInt(channelType, 10) : channelType;
-      return DM_CHANNEL_TYPES.includes(typeNum);
+      return typeNum === 1 || typeNum === 3;
     };
 
     const parseIds = (ids: string | undefined): string[] => {
@@ -309,14 +308,22 @@ export class DiscordSelfTrigger implements INodeType {
       if (event === 'messageCreate' || event === 'dmReceived') {
         client.on('messageCreate', (message: Message) => {
           try {
-            const isDM = isDMChannel(message.channel.type);
+            const channelType = message.channel.type;
+            // Check if channel is DM (type 1 = DM, type 3 = Group DM)
+            const typeNum =
+              typeof channelType === 'number' ? channelType : parseInt(channelType, 10);
+            const isDM = typeNum === 1 || typeNum === 3;
 
+            // For dmReceived: only trigger on DMs from OTHER users (not self)
             if (event === 'dmReceived') {
-              if (!isDM || message.author.id === client.user?.id) {
+              const clientId = client.user?.id ?? '';
+              const isFromSelf = message.author.id === clientId;
+              if (!isDM || isFromSelf) {
                 return;
               }
             }
 
+            // Build message data
             const data = {
               messageId: message.id,
               channelId: message.channelId,
@@ -325,7 +332,7 @@ export class DiscordSelfTrigger implements INodeType {
               userId: message.author.id,
               isBot: message.author.bot,
               isDM,
-              channelType: String(message.channel.type),
+              channelType: String(channelType),
               author: {
                 id: message.author.id,
                 username: message.author.username,
