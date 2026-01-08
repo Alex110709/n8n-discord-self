@@ -1,39 +1,39 @@
-import { DiscordTool } from '../src/nodes/DiscordTool/DiscordTool.node';
+import { DiscordUserTool } from '../src/nodes/DiscordUserTool/DiscordUserTool.node';
 
-describe('DiscordTool Node', () => {
-  let discordTool: DiscordTool;
+describe('DiscordUserTool Node', () => {
+  let discordUserTool: DiscordUserTool;
 
   beforeEach(() => {
-    discordTool = new DiscordTool();
+    discordUserTool = new DiscordUserTool();
   });
 
   describe('Node Description', () => {
     it('should have correct display name', () => {
-      expect(discordTool.description.displayName).toBe('Discord Tool');
+      expect(discordUserTool.description.displayName).toBe('Discord User Tool');
     });
 
     it('should have correct internal name', () => {
-      expect(discordTool.description.name).toBe('discordTool');
+      expect(discordUserTool.description.name).toBe('discordUserTool');
     });
 
     it('should be usable as AI Agent tool', () => {
-      expect(discordTool.description.usableAsTool).toBe(true);
+      expect(discordUserTool.description.usableAsTool).toBe(true);
     });
 
     it('should require discordSelfApi credentials', () => {
-      expect(discordTool.description.credentials).toEqual([
+      expect(discordUserTool.description.credentials).toEqual([
         { name: 'discordSelfApi', required: true },
       ]);
     });
 
     it('should have action property', () => {
-      const actionProp = discordTool.description.properties.find((p) => p.name === 'action');
+      const actionProp = discordUserTool.description.properties.find((p) => p.name === 'action');
       expect(actionProp).toBeDefined();
       expect(actionProp?.type).toBe('options');
     });
 
     it('should have all expected actions', () => {
-      const actionProp = discordTool.description.properties.find((p) => p.name === 'action');
+      const actionProp = discordUserTool.description.properties.find((p) => p.name === 'action');
       const options = actionProp?.options as Array<{ value: string }>;
       const actionValues = options.map((o) => o.value);
 
@@ -57,25 +57,25 @@ describe('DiscordTool Node', () => {
 
   describe('Node Properties', () => {
     it('should have channelId property', () => {
-      const prop = discordTool.description.properties.find((p) => p.name === 'channelId');
+      const prop = discordUserTool.description.properties.find((p) => p.name === 'channelId');
       expect(prop).toBeDefined();
       expect(prop?.type).toBe('string');
     });
 
     it('should have userId property', () => {
-      const prop = discordTool.description.properties.find((p) => p.name === 'userId');
+      const prop = discordUserTool.description.properties.find((p) => p.name === 'userId');
       expect(prop).toBeDefined();
       expect(prop?.type).toBe('string');
     });
 
     it('should have content property', () => {
-      const prop = discordTool.description.properties.find((p) => p.name === 'content');
+      const prop = discordUserTool.description.properties.find((p) => p.name === 'content');
       expect(prop).toBeDefined();
       expect(prop?.type).toBe('string');
     });
 
     it('should have limit property with min/max values', () => {
-      const prop = discordTool.description.properties.find((p) => p.name === 'limit');
+      const prop = discordUserTool.description.properties.find((p) => p.name === 'limit');
       expect(prop).toBeDefined();
       expect(prop?.type).toBe('number');
       expect(prop?.typeOptions?.minValue).toBe(1);
@@ -83,7 +83,7 @@ describe('DiscordTool Node', () => {
     });
 
     it('should have status property with correct options', () => {
-      const prop = discordTool.description.properties.find((p) => p.name === 'status');
+      const prop = discordUserTool.description.properties.find((p) => p.name === 'status');
       expect(prop).toBeDefined();
       expect(prop?.type).toBe('options');
       const options = prop?.options as Array<{ value: string }>;

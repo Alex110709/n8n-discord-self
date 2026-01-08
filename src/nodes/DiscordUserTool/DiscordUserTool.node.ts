@@ -11,10 +11,10 @@ import { Client, TextChannel, DMChannel, NewsChannel } from 'discord.js-selfbot-
 
 type SendableChannel = TextChannel | DMChannel | NewsChannel;
 
-export class DiscordTool implements INodeType {
+export class DiscordUserTool implements INodeType {
   description: INodeTypeDescription = {
-    displayName: 'Discord Tool',
-    name: 'discordTool',
+    displayName: 'Discord User Tool',
+    name: 'discordUserTool',
     icon: 'file:discord.svg',
     group: ['transform'],
     version: 1,
