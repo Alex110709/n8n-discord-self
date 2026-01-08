@@ -26,32 +26,36 @@ describe('DiscordUserTool Node', () => {
       ]);
     });
 
-    it('should have action property', () => {
-      const actionProp = discordUserTool.description.properties.find((p) => p.name === 'action');
-      expect(actionProp).toBeDefined();
-      expect(actionProp?.type).toBe('options');
+    it('should have operation property', () => {
+      const operationProp = discordUserTool.description.properties.find(
+        (p) => p.name === 'operation',
+      );
+      expect(operationProp).toBeDefined();
+      expect(operationProp?.type).toBe('options');
     });
 
-    it('should have all expected actions', () => {
-      const actionProp = discordUserTool.description.properties.find((p) => p.name === 'action');
-      const options = actionProp?.options as Array<{ value: string }>;
-      const actionValues = options.map((o) => o.value);
+    it('should have all expected operations', () => {
+      const operationProp = discordUserTool.description.properties.find(
+        (p) => p.name === 'operation',
+      );
+      const options = operationProp?.options as Array<{ value: string }>;
+      const operationValues = options.map((o) => o.value);
 
-      expect(actionValues).toContain('sendMessage');
-      expect(actionValues).toContain('sendDM');
-      expect(actionValues).toContain('readMessages');
-      expect(actionValues).toContain('editMessage');
-      expect(actionValues).toContain('deleteMessage');
-      expect(actionValues).toContain('addReaction');
-      expect(actionValues).toContain('getServerInfo');
-      expect(actionValues).toContain('listServers');
-      expect(actionValues).toContain('listChannels');
-      expect(actionValues).toContain('listMembers');
-      expect(actionValues).toContain('getUserInfo');
-      expect(actionValues).toContain('searchMessages');
-      expect(actionValues).toContain('setStatus');
-      expect(actionValues).toContain('joinServer');
-      expect(actionValues).toContain('leaveServer');
+      expect(operationValues).toContain('sendMessage');
+      expect(operationValues).toContain('sendDM');
+      expect(operationValues).toContain('readMessages');
+      expect(operationValues).toContain('editMessage');
+      expect(operationValues).toContain('deleteMessage');
+      expect(operationValues).toContain('addReaction');
+      expect(operationValues).toContain('getServerInfo');
+      expect(operationValues).toContain('listServers');
+      expect(operationValues).toContain('listChannels');
+      expect(operationValues).toContain('listMembers');
+      expect(operationValues).toContain('getUserInfo');
+      expect(operationValues).toContain('searchMessages');
+      expect(operationValues).toContain('setStatus');
+      expect(operationValues).toContain('joinServer');
+      expect(operationValues).toContain('leaveServer');
     });
   });
 

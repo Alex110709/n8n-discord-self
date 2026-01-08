@@ -18,11 +18,11 @@ export class DiscordUserTool implements INodeType {
     icon: 'file:discord.svg',
     group: ['transform'],
     version: 1,
-    subtitle: '={{$parameter["action"]}}',
+    subtitle: '={{$parameter["operation"]}}',
     description:
-      'Discord automation tool for AI Agents - Send messages, read channels, manage servers, and interact with Discord',
+      'Discord operations for AI Agents. Send/read messages, manage servers, and interact with Discord. Use this when you need to communicate on Discord or get Discord information.',
     defaults: {
-      name: 'Discord Tool',
+      name: 'Discord User Tool',
     },
     inputs: ['main'],
     outputs: ['main'],
@@ -35,113 +35,106 @@ export class DiscordUserTool implements INodeType {
     ],
     properties: [
       {
-        displayName: 'Action',
-        name: 'action',
+        displayName: 'Operation',
+        name: 'operation',
         type: 'options',
         noDataExpression: true,
         options: [
           {
-            name: 'Send Message to Channel',
+            name: 'Send Message',
             value: 'sendMessage',
-            description: 'Send a text message to a Discord channel',
-            action: 'Send message to channel',
+            description:
+              'Send a text message to a channel. Input: channelId (required), content (required)',
           },
           {
             name: 'Send Direct Message',
             value: 'sendDM',
-            description: 'Send a direct message (DM) to a Discord user',
-            action: 'Send direct message to user',
+            description: 'Send a DM to a user. Input: userId (required), content (required)',
           },
           {
             name: 'Read Messages',
             value: 'readMessages',
-            description: 'Read recent messages from a Discord channel',
-            action: 'Read messages from channel',
+            description:
+              'Get recent messages from a channel. Input: channelId (required), limit (optional, default 10)',
           },
           {
             name: 'Edit Message',
             value: 'editMessage',
-            description: 'Edit an existing message that you sent',
-            action: 'Edit a message',
+            description:
+              'Edit a message you sent. Input: channelId (required), messageId (required), newContent (required)',
           },
           {
             name: 'Delete Message',
             value: 'deleteMessage',
-            description: 'Delete a message from a channel',
-            action: 'Delete a message',
+            description: 'Delete a message. Input: channelId (required), messageId (required)',
           },
           {
             name: 'Add Reaction',
             value: 'addReaction',
-            description: 'Add an emoji reaction to a message',
-            action: 'Add reaction to message',
-          },
-          {
-            name: 'Get Server Info',
-            value: 'getServerInfo',
-            description: 'Get information about a Discord server (guild)',
-            action: 'Get server information',
-          },
-          {
-            name: 'List Servers',
-            value: 'listServers',
-            description: 'List all Discord servers the user is a member of',
-            action: 'List all servers',
-          },
-          {
-            name: 'List Channels',
-            value: 'listChannels',
-            description: 'List all channels in a Discord server',
-            action: 'List channels in server',
-          },
-          {
-            name: 'List Members',
-            value: 'listMembers',
-            description: 'List members in a Discord server',
-            action: 'List server members',
-          },
-          {
-            name: 'Get User Info',
-            value: 'getUserInfo',
-            description: 'Get information about a Discord user',
-            action: 'Get user information',
+            description:
+              'Add an emoji reaction. Input: channelId (required), messageId (required), emoji (required)',
           },
           {
             name: 'Search Messages',
             value: 'searchMessages',
-            description: 'Search for messages containing specific text in a channel',
-            action: 'Search messages in channel',
+            description:
+              'Find messages containing text. Input: channelId (required), searchQuery (required), limit (optional)',
+          },
+          {
+            name: 'Get Server Info',
+            value: 'getServerInfo',
+            description: 'Get Discord server information. Input: serverId (required)',
+          },
+          {
+            name: 'List My Servers',
+            value: 'listServers',
+            description: 'Get all servers you belong to. No input required',
+          },
+          {
+            name: 'List Channels',
+            value: 'listChannels',
+            description: 'Get all channels in a server. Input: serverId (required)',
+          },
+          {
+            name: 'List Members',
+            value: 'listMembers',
+            description: 'Get server members. Input: serverId (required), limit (optional)',
+          },
+          {
+            name: 'Get User Info',
+            value: 'getUserInfo',
+            description: 'Get Discord user information. Input: userId (required)',
           },
           {
             name: 'Set Status',
             value: 'setStatus',
-            description: 'Set your online status (online, idle, dnd, invisible)',
-            action: 'Set online status',
+            description:
+              'Set your online status. Input: status (required: online/idle/dnd/invisible)',
           },
           {
             name: 'Join Server',
             value: 'joinServer',
-            description: 'Join a Discord server using an invite code',
-            action: 'Join server with invite',
+            description: 'Join a server with invite code. Input: inviteCode (required)',
           },
           {
             name: 'Leave Server',
             value: 'leaveServer',
-            description: 'Leave a Discord server',
-            action: 'Leave a server',
+            description: 'Leave a Discord server. Input: serverId (required)',
           },
         ],
         default: 'sendMessage',
+        placeholder: 'Select operation...',
       },
       {
         displayName: 'Channel ID',
         name: 'channelId',
         type: 'string',
         default: '',
-        required: true,
+        description:
+          'The Discord channel ID (enable Developer Mode in Discord settings > Advanced)',
         displayOptions: {
           show: {
-            action: [
+            operation: [
               'sendMessage',
               'readMessages',
               'editMessage',
@@ -151,119 +144,111 @@ export class DiscordUserTool implements INodeType {
             ],
           },
         },
-        description: 'The Discord channel ID (enable Developer Mode in Discord to copy IDs)',
       },
       {
         displayName: 'User ID',
         name: 'userId',
         type: 'string',
         default: '',
-        required: true,
+        description: 'The Discord user ID (right-click user > Copy ID with Developer Mode enabled)',
         displayOptions: {
           show: {
-            action: ['sendDM', 'getUserInfo'],
+            operation: ['sendDM', 'getUserInfo'],
           },
         },
-        description: 'The Discord user ID to send DM to or get info about',
       },
       {
         displayName: 'Message Content',
         name: 'content',
         type: 'string',
         default: '',
-        required: true,
         typeOptions: {
           rows: 4,
         },
+        description: 'The text content of your message',
         displayOptions: {
           show: {
-            action: ['sendMessage', 'sendDM'],
+            operation: ['sendMessage', 'sendDM'],
           },
         },
-        description: 'The text content of the message to send',
       },
       {
         displayName: 'Message ID',
         name: 'messageId',
         type: 'string',
         default: '',
-        required: true,
+        description: 'The ID of the message to edit, delete, or react to',
         displayOptions: {
           show: {
-            action: ['editMessage', 'deleteMessage', 'addReaction'],
+            operation: ['editMessage', 'deleteMessage', 'addReaction'],
           },
         },
-        description: 'The ID of the message to edit, delete, or react to',
       },
       {
         displayName: 'New Content',
         name: 'newContent',
         type: 'string',
         default: '',
-        required: true,
         typeOptions: {
           rows: 4,
         },
+        description: 'The new text content for the message',
         displayOptions: {
           show: {
-            action: ['editMessage'],
+            operation: ['editMessage'],
           },
         },
-        description: 'The new text content for the message',
       },
       {
         displayName: 'Emoji',
         name: 'emoji',
         type: 'string',
         default: '👍',
-        required: true,
+        description: 'Emoji to add (e.g., 👍, ❤️, 🎉, or custom emoji name:emoji)',
         displayOptions: {
           show: {
-            action: ['addReaction'],
+            operation: ['addReaction'],
           },
         },
-        description: 'The emoji to add as reaction (e.g., 👍, ❤️, 🎉)',
       },
       {
         displayName: 'Server ID',
         name: 'serverId',
         type: 'string',
         default: '',
-        required: true,
+        description: 'The Discord server (guild) ID (right-click server name > Copy ID)',
         displayOptions: {
           show: {
-            action: ['getServerInfo', 'listChannels', 'listMembers', 'leaveServer'],
+            operation: ['getServerInfo', 'listChannels', 'listMembers', 'leaveServer'],
           },
         },
-        description: 'The Discord server (guild) ID',
       },
       {
         displayName: 'Search Query',
         name: 'searchQuery',
         type: 'string',
         default: '',
-        required: true,
+        description: 'Text to search for in messages',
         displayOptions: {
           show: {
-            action: ['searchMessages'],
+            operation: ['searchMessages'],
           },
         },
-        description: 'The text to search for in messages',
       },
       {
         displayName: 'Limit',
         name: 'limit',
         type: 'number',
         default: 10,
-        displayOptions: {
-          show: {
-            action: ['readMessages', 'listMembers', 'searchMessages'],
-          },
-        },
-        description: 'Maximum number of items to return',
+        description: 'Maximum number of results to return (1-100)',
         typeOptions: {
           minValue: 1,
           maxValue: 100,
+        },
+        displayOptions: {
+          show: {
+            operation: ['readMessages', 'listMembers', 'searchMessages'],
+          },
         },
       },
       {
@@ -271,32 +256,30 @@ export class DiscordUserTool implements INodeType {
         name: 'status',
         type: 'options',
         default: 'online',
-        required: true,
+        description: 'Your online status',
         displayOptions: {
           show: {
-            action: ['setStatus'],
+            operation: ['setStatus'],
           },
         },
         options: [
-          { name: 'Online', value: 'online' },
-          { name: 'Idle', value: 'idle' },
-          { name: 'Do Not Disturb', value: 'dnd' },
-          { name: 'Invisible', value: 'invisible' },
+          { name: 'Online 🟢', value: 'online' },
+          { name: 'Idle 🌙', value: 'idle' },
+          { name: 'Do Not Disturb 🔴', value: 'dnd' },
+          { name: 'Invisible ⚫', value: 'invisible' },
         ],
-        description: 'Your online status',
       },
       {
         displayName: 'Invite Code',
         name: 'inviteCode',
         type: 'string',
         default: '',
-        required: true,
+        description: 'The invite code (e.g., "abc123" from discord.gg/abc123)',
         displayOptions: {
           show: {
-            action: ['joinServer'],
+            operation: ['joinServer'],
           },
         },
-        description: 'The Discord invite code (e.g., "abc123" from discord.gg/abc123)',
       },
     ],
   };
@@ -314,10 +297,10 @@ export class DiscordUserTool implements INodeType {
 
       for (let i = 0; i < items.length; i++) {
         try {
-          const action = this.getNodeParameter('action', i) as string;
+          const operation = this.getNodeParameter('operation', i) as string;
           let result: IDataObject | IDataObject[];
 
-          switch (action) {
+          switch (operation) {
             case 'sendMessage': {
               const channelId = this.getNodeParameter('channelId', i) as string;
               const content = this.getNodeParameter('content', i) as string;
@@ -330,6 +313,7 @@ export class DiscordUserTool implements INodeType {
               }
               const message = await (channel as SendableChannel).send(content);
               result = {
+                operation: 'sendMessage',
                 success: true,
                 messageId: message.id,
                 channelId: message.channelId,
@@ -349,6 +333,7 @@ export class DiscordUserTool implements INodeType {
               const dmChannel = await user.createDM();
               const message = await dmChannel.send(content);
               result = {
+                operation: 'sendDM',
                 success: true,
                 messageId: message.id,
                 recipientId: userId,
@@ -371,6 +356,7 @@ export class DiscordUserTool implements INodeType {
               }
               const messages = await (channel as SendableChannel).messages.fetch({ limit });
               result = Array.from(messages.values()).map((m) => ({
+                operation: 'readMessages',
                 messageId: m.id,
                 content: m.content,
                 authorId: m.author.id,
@@ -392,6 +378,7 @@ export class DiscordUserTool implements INodeType {
               const message = await (channel as SendableChannel).messages.fetch(messageId);
               const edited = await message.edit(newContent);
               result = {
+                operation: 'editMessage',
                 success: true,
                 messageId: edited.id,
                 newContent: edited.content,
@@ -410,6 +397,7 @@ export class DiscordUserTool implements INodeType {
               const message = await (channel as SendableChannel).messages.fetch(messageId);
               await message.delete();
               result = {
+                operation: 'deleteMessage',
                 success: true,
                 deletedMessageId: messageId,
               };
@@ -427,6 +415,7 @@ export class DiscordUserTool implements INodeType {
               const message = await (channel as SendableChannel).messages.fetch(messageId);
               await message.react(emoji);
               result = {
+                operation: 'addReaction',
                 success: true,
                 messageId,
                 emoji,
@@ -438,6 +427,7 @@ export class DiscordUserTool implements INodeType {
               const serverId = this.getNodeParameter('serverId', i) as string;
               const guild = await client.guilds.fetch(serverId);
               result = {
+                operation: 'getServerInfo',
                 serverId: guild.id,
                 name: guild.name,
                 memberCount: guild.memberCount,
@@ -452,6 +442,7 @@ export class DiscordUserTool implements INodeType {
             case 'listServers': {
               const guilds = await client.guilds.fetch();
               result = Array.from(guilds.values()).map((g) => ({
+                operation: 'listServers',
                 serverId: g.id,
                 name: g.name,
               }));
@@ -465,6 +456,7 @@ export class DiscordUserTool implements INodeType {
               result = Array.from(channels.values())
                 .filter((c) => c !== null)
                 .map((c) => ({
+                  operation: 'listChannels',
                   channelId: c!.id,
                   name: c!.name,
                   type: c!.type,
@@ -479,8 +471,9 @@ export class DiscordUserTool implements INodeType {
               const guild = await client.guilds.fetch(serverId);
               const members = await guild.members.fetch({ limit });
               result = Array.from(members.values()).map((m) => ({
-                oderId: m.id,
-                odername: m.user.username,
+                operation: 'listMembers',
+                userId: m.id,
+                username: m.user.username,
                 nickname: m.nickname,
                 joinedAt: m.joinedAt?.toISOString(),
                 isBot: m.user.bot,
@@ -492,6 +485,7 @@ export class DiscordUserTool implements INodeType {
               const userId = this.getNodeParameter('userId', i) as string;
               const user = await client.users.fetch(userId);
               result = {
+                operation: 'getUserInfo',
                 userId: user.id,
                 username: user.username,
                 discriminator: user.discriminator,
@@ -515,6 +509,7 @@ export class DiscordUserTool implements INodeType {
                 .filter((m) => m.content.toLowerCase().includes(searchQuery.toLowerCase()))
                 .slice(0, limit);
               result = filtered.map((m) => ({
+                operation: 'searchMessages',
                 messageId: m.id,
                 content: m.content,
                 authorId: m.author.id,
@@ -532,6 +527,7 @@ export class DiscordUserTool implements INodeType {
                 | 'invisible';
               await client.user?.setStatus(status);
               result = {
+                operation: 'setStatus',
                 success: true,
                 newStatus: status,
               };
@@ -543,6 +539,7 @@ export class DiscordUserTool implements INodeType {
               const invite = await client.fetchInvite(inviteCode);
               await invite.acceptInvite();
               result = {
+                operation: 'joinServer',
                 success: true,
                 joinedServer: invite.guild?.name,
                 serverId: invite.guild?.id,
@@ -555,6 +552,7 @@ export class DiscordUserTool implements INodeType {
               const guild = await client.guilds.fetch(serverId);
               await guild.leave();
               result = {
+                operation: 'leaveServer',
                 success: true,
                 leftServerId: serverId,
               };
@@ -562,18 +560,29 @@ export class DiscordUserTool implements INodeType {
             }
 
             default:
-              throw new NodeOperationError(this.getNode(), `Unknown action: ${action}`);
+              throw new NodeOperationError(this.getNode(), `Unknown operation: ${operation}`);
           }
 
           if (Array.isArray(result)) {
-            result.forEach((item) => returnData.push({ json: item, pairedItem: { item: i } }));
+            result.forEach((item) =>
+              returnData.push({
+                json: { tool: 'discordUserTool', ...item },
+                pairedItem: { item: i },
+              }),
+            );
           } else {
-            returnData.push({ json: result, pairedItem: { item: i } });
+            returnData.push({
+              json: { tool: 'discordUserTool', ...result },
+              pairedItem: { item: i },
+            });
           }
         } catch (error) {
           if (this.continueOnFail()) {
             returnData.push({
-              json: { error: error instanceof Error ? error.message : String(error) },
+              json: {
+                tool: 'discordUserTool',
+                error: error instanceof Error ? error.message : String(error),
+              },
               pairedItem: { item: i },
             });
             continue;
